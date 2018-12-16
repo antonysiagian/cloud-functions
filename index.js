@@ -1,6 +1,6 @@
-const authController = require('./domains/authentication/authController');
+const authController = require('./authentication.controller');
 const CONSTANTS = require('./constant');
-const logger = require('./domains/util/logger')
+const logger = require('./util.logger')
 
 exports.auth = (req, res) => {
 
