@@ -39,11 +39,12 @@ const auth = {
                                 reject(err)
                             })
                     }else{
-                        logger.logOnError(`Could not find token`, findResult)
+                        logger.logOnError(`Could not find token`, ['Find Result is', findResult])
                         reject('Could not find client')
                     }
                 })
                 .catch(err => {
+                    logger.logOnError('Could not find client', ['err is', err])
                     reject('Could not find client')
                 })
         })
