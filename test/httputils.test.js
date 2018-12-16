@@ -1,4 +1,4 @@
-const httpUtil = require('../../domains/util/httpUtil')
+const httpUtil = require('../util.http')
 const assert = require('assert')
 
 

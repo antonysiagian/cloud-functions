@@ -1,11 +1,14 @@
 const base64 = require('base-64')
 const utf8 = require('utf8')
 const uuidv4 = require('uuid/v4')
-const clientService = require('../client/clientService')
-const activeTokenService = require('../token/activeTokenService')
-const logger = require('../util/logger')
-const EXPIRY_DURATION_IN_MINUTES = process.env.EXPIRY_DURATION_IN_MINUTES || '10';
 const date = require('date-and-time')
+
+const EXPIRY_DURATION_IN_MINUTES = process.env.EXPIRY_DURATION_IN_MINUTES || '10';
+
+const clientService = require('./client.service')
+const activeTokenService = require('./activetoken.service')
+const logger = require('./util.logger')
+
 
 const auth = {
 

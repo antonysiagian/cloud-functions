@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../../sequelize')
+const sequelize = require('./sequelize')
 
 const activeToken = sequelize.define('active_tokens', {
     id: {

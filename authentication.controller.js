@@ -1,7 +1,7 @@
-const authService = require ('./authService')
-const CONST = require('../../constant')
-const logger = require('../util/logger')
-const httpUtil = require('../util/httpUtil')
+const authService = require ('./authentication.service')
+const CONST = require('./constant')
+const logger = require('./util.logger')
+const httpUtil = require('./util.http')
 
 module.exports.getToken = (request, response) => {
     try{

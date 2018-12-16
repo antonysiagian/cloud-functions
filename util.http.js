@@ -1,5 +1,5 @@
-const logger = require('../util/logger')
-const constants = require('../../constant')
+const logger = require('./util.logger')
+const constants = require('./constant')
 
 const MAX_LENGTH_AUTH = 100;
 const BASIC_AUTH_KEYWORD = "Basic"

@@ -1,5 +1,6 @@
+const Op = require('sequelize').Op
+
 const client = require('./client')
-const Op = require('sequelize').Op;
 
 module.exports.findByClientIdAndCredential = (clientId, clientCredential) => {
     return client.findOne({where: {
