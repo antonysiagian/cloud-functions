@@ -7,11 +7,13 @@ exports.auth = (req, res) => {
     const contentType = req.get(CONSTANTS.CONTENT_TYPE);
     const requestMethod = req.method;
     const authorization = req.get(CONSTANTS.AUTHORIZATION);
-    
+    const query = req.query;
+
     logger.log('PATH: ', req.path)
     logger.log('Request method: ', req.method)
     logger.log('Content Type: ', contentType)
     logger.log('Authorization', authorization)
+    logger.log('Http Query', query)
 
     if(CONSTANTS.HTTP_METHOD_POST === requestMethod){
         authController.getToken(req, res);
