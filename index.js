@@ -9,11 +9,11 @@ exports.auth = (req, res) => {
     const authorization = req.get(CONSTANTS.AUTHORIZATION);
     const query = req.query;
 
-    logger.log('PATH: ', req.path)
-    logger.log('Request method: ', req.method)
-    logger.log('Content Type: ', contentType)
-    logger.log('Authorization', authorization)
-    logger.log('Http Query', query)
+    logger.log('PATH: ', req.path)//default value null, if exists /path
+    logger.log('Request method: ', req.method) //"GET", "POST", "PUT"
+    logger.log('Content Type: ', contentType) // application/json
+    logger.log('Authorization', authorization)// null or Basic AMRNCHHZHHAQPEDMASLKMDELKASD==
+    logger.log('Http Query', query) // type object{}
 
     if(CONSTANTS.HTTP_METHOD_POST === requestMethod){
         authController.getToken(req, res);
