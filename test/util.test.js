@@ -2,7 +2,7 @@ const CONST = require('../constant')
 
 module.exports.createSuccessGetTokenRequest = () => {
     return {   
-        path: '/', 
+        path: '/token', 
         method: 'GET',
         get(param) { 
             if(param === CONST.AUTHORIZATION){
@@ -16,7 +16,7 @@ module.exports.createSuccessGetTokenRequest = () => {
 
 module.exports.createMockRequestNoRequestMethodFound = () => {
     return {   
-        path: '/', 
+        path: '/token', 
         method: 'POST'  
     }
 }   

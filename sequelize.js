@@ -2,7 +2,7 @@
 const Sequelize = require('sequelize');
 
 const env = process.env.NODE_ENV || 'local'
-const sp = process.env.INSTANCE_HOST_NAME|| '/tmp/mysql.sock'; //mysqladmin variables
+const sp = process.env.INSTANCE_HOST_NAME || '/tmp/mysql.sock'; //mysqladmin variables
 const dbUser = process.env.SQL_USER || 'root';
 const dbPassword = process.env.SQL_PASSWORD || 'master';
 const dbName = process.env.SQL_NAME || 'app';

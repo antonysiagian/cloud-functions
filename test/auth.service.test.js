@@ -1,6 +1,11 @@
+const uuid = require('uuid').v4;
+const dateAndTime = require('date-and-time')
+
 const assert = require('assert')
 const authService = require('../authentication.service')
 const logger = require('../util.logger')
+const activeTokenService = require('../activetoken.service')
+
 
 describe('This is tests for authService', () => {
 
@@ -43,5 +48,28 @@ describe('This is tests for authService', () => {
             done()
         })
     })
+
+    it('should return token is expired', (done) => {
+        let activeToken = authService.createNewActiveToken({clientId: uuid()});
+        //set token to expiry
+        activeToken.startTime = dateAndTime.addMinutes(activeToken.startTime, -10)
+        activeToken.expiryTime = dateAndTime.addMinutes(activeToken.expiryTime, -10)
+
+        activeTokenService.insertActiveToken(activeToken)
+            .then(() => {
+                authService.isAuth(activeToken.uuid)
+                    .then(result => {
+                        logger.log('activeToken should be expired', activeToken)
+                        assert.equal(false, result, 'the token should be expiry');
+                        done();
+                    })
+                    .catch(err => {
+                        logger.logOnError('Active token is error', err)
+                        assert.equal(1, 0, 'should not go here')
+                        done();
+                    })
+            })
+        
+    });
 
 });

@@ -1,5 +1,5 @@
 const dispatcher = require('./dispatcher')
 
-exports.functions = (req, res) => {
+exports.security = (req, res) => {
     dispatcher.dispatch(req, res);
 }

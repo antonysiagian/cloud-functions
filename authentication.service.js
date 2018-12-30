@@ -12,15 +12,15 @@ const logger = require('./util.logger')
 
 const auth = {
 
-    getExpiryTime(dateToAdd = new Date()){
+    calculateExpiryTime(dateToAdd = new Date()){
         return date.addMinutes(dateToAdd, EXPIRY_DURATION_IN_MINUTES)
     },
-    createNewActiveToken(findResult){
+    createNewActiveToken(client){
         dateStartTime = new Date();
-        return {'clientId': findResult.clientId, 'uuid': uuidv4(), 'startTime': dateStartTime, 'expiryTime': auth.getExpiryTime(dateStartTime), 'refreshToken': uuidv4()}
+        return {'clientId': client.clientId, 'uuid': uuidv4(), 'startTime': dateStartTime, 'expiryTime': auth.calculateExpiryTime(dateStartTime), 'refreshToken': uuidv4()}
     },
-    constructResponseFromNewToken(newToken){
-        return {token: newToken.uuid, refreshToken: newToken.refreshToken, startTime: newToken.startTime, expiryTime: newToken.expiryTime}
+    constructResponseFromToken(token){
+        return {token: token.uuid, refreshToken: token.refreshToken, startTime: token.startTime, expiryTime: token.expiryTime}
     },
     getToken: (authorisationCredential) => {
 
@@ -33,7 +33,7 @@ const auth = {
                     if(findResult){
                         const newActiveToken = auth.createNewActiveToken(findResult);
                         activeTokenService.insertActiveToken(newActiveToken)
-                            .then(resolveThePromise(auth.constructResponseFromNewToken(newActiveToken)))
+                            .then(resolveThePromise(auth.constructResponseFromToken(newActiveToken)))
                             .catch(err => {
                                 logger.logOnError(`Fail to insert active token`, err)
                                 reject(err)
@@ -55,12 +55,20 @@ const auth = {
             activeTokenService.findActiveToken(bearer)
                 .then((activeToken) => {
                     if(activeToken){
-                        resolve(auth.constructResponseFromNewToken(activeToken))
+                        if(activeToken.expiryTime > new Date()){
+                            resolve(auth.constructResponseFromToken(activeToken))
+                        }else{
+                            logger.log('Token expiry', activeToken)
+                            resolve(false)
+                        }
                     }else{
-                        logger.log('No Active token found')
-                        reject('no active token found')
+                        logger.log('No token found', bearer)
+                        resolve(false)
                     }
-                }).catch( err => reject(`token not found: ${err}`))
+                }).catch( err => {
+                    logger.logOnError('Something wrong when looking for activeToken', bearer)
+                    reject(false)
+                })
         })
     }
 

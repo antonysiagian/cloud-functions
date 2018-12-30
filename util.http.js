@@ -15,3 +15,15 @@ module.exports.getAuthToken = (fullAuthToken) => {
     }
     
 }
+
+module.exports.getBearerToken = (bearerToken) => {
+    
+    if(bearerToken 
+        && bearerToken.length < MAX_LENGTH_AUTH
+        && bearerToken.indexOf(constants.BEARER) === 0 
+        && (split = bearerToken.split(constants.STRING_EMTPY)) 
+        && split.length === 2){
+        return split[1];
+    }
+    
+}

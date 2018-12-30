@@ -3,9 +3,14 @@ const controller = require('./controller')
 const router = {
     paths: [
         {
-            path: '/',
+            path: '/token',
             method: 'GET', 
             handler: controller.getToken
+        },
+        {
+            path: '/auth',
+            method: 'GET', 
+            handler: controller.isAuth
         }
     ]
 }

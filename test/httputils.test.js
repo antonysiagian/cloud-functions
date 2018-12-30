@@ -23,4 +23,8 @@ describe("This is test for testing of httpUtil", () => {
     it('Test when auth header is too long without space', ()=>{
         assert.equal(null, httpUtil.getAuthToken('Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw='))
     })
+
+    it('Test get bearer token', ()=>{
+        assert.equal('SampleOFBearerToken', httpUtil.getBearerToken('Bearer SampleOFBearerToken'))
+    })
 })
