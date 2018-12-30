@@ -1,9 +1,8 @@
+const EXPIRY_DURATION_IN_MINUTES = process.env.EXPIRY_DURATION_IN_MINUTES || '10';
 const base64 = require('base-64')
 const utf8 = require('utf8')
 const uuidv4 = require('uuid/v4')
 const date = require('date-and-time')
-
-const EXPIRY_DURATION_IN_MINUTES = process.env.EXPIRY_DURATION_IN_MINUTES || '10';
 
 const clientService = require('./client.service')
 const activeTokenService = require('./activetoken.service')
@@ -28,9 +27,9 @@ const auth = {
         
         return new Promise((resolve, reject) => {
             clientService.findByClientIdAndCredential(params[0], params[1])
-                .then(findResult => {
-                    if(findResult){
-                        const newActiveToken = auth.createActiveToken(findResult);
+                .then(client => {
+                    if(client){
+                        const newActiveToken = auth.createActiveToken(client);
                         activeTokenService.insertActiveToken(newActiveToken)
                             .then(resolve(auth.constructResponseFromToken(newActiveToken)))
                             .catch(err => {
@@ -38,7 +37,7 @@ const auth = {
                                 reject(err)
                             })
                     }else{
-                        logger.error(`Could not find token`, ['Find Result is', findResult])
+                        logger.error(`Could not find token`, ['Client is', client])
                         reject('Could not find client')
                     }
                 })
@@ -65,7 +64,7 @@ const auth = {
                         resolve(false)
                     }
                 }).catch( err => {
-                    logger.error('Something wrong when looking for activeToken', bearer)
+                    logger.error('Something wrong when looking for activeToken', bearer, err)
                     reject(false)
                 })
         })

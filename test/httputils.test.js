@@ -8,23 +8,23 @@ describe("This is test for testing of httpUtil", () => {
         assert.equal(null, httpUtil.getAuthToken(''))
     });
 
-    it('Test when auth header consist of basic is not empty', ()=>{
+    it('Test when auth header consist of basic is not empty', () => {
         assert.equal('lkmasdlkamd', httpUtil.getAuthToken('Basic lkmasdlkamd'))
     })
 
-    it('Test when auth header is correct', ()=>{
+    it('Test when auth header is correct', () => {
         assert.equal('d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=', httpUtil.getAuthToken('Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw='))
     })
 
-    it('Test when auth header is too long with space' , ()=>{
+    it('Test when auth header is too long with space' , () => {
         assert.equal(null, httpUtil.getAuthToken('Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw= d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw='))
     })
 
-    it('Test when auth header is too long without space', ()=>{
+    it('Test when auth header is too long without space', () => {
         assert.equal(null, httpUtil.getAuthToken('Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw='))
     })
 
-    it('Test get bearer token', ()=>{
+    it('Test get bearer token', () => {
         assert.equal('SampleOFBearerToken', httpUtil.getBearerToken('Bearer SampleOFBearerToken'))
     })
 })
