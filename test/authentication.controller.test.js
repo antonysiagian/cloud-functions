@@ -23,7 +23,7 @@ describe('This is a test for authentication controller', () => {
 
         response.onComplete()
             .then((backendResponse) => {
-                logger.log('Success getting backend response', backendResponse)
+                logger.trace('Success getting backend response', backendResponse)
                 assert.equal('200', backendResponse.statusCode)
 
                 let isAuthRequest = testUtil.createSuccessIsAuthTokenRequest(backendResponse.jsonResponse.token)
@@ -32,7 +32,7 @@ describe('This is a test for authentication controller', () => {
                 dispatcher.dispatch(isAuthRequest, isAuthResponse)
 
                 isAuthResponse.onComplete().then((isAuthResponse)=>{
-                    logger.log('isAuthResponse', isAuthResponse)
+                    logger.trace('isAuthResponse', isAuthResponse)
                     assert.equal(isAuthResponse.jsonResponse.token, backendResponse.jsonResponse.token)
                     done()
                 })

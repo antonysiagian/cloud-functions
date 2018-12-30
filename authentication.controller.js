@@ -15,14 +15,14 @@ module.exports.getToken = (request, response) => {
                             .status(CONST.HTTP_RESPONSE_CODE_SUCCESS)
                             .json(token)
                     }).catch(err => {
-                        logger.logOnError('Error on getToken', err)
+                        logger.error('Error on getToken', err)
                         throw err;
                     })
         }else{
             throw "No authkey found";
         }
     }catch(err){
-        logger.logOnError(`Error when calling getToken Controller`, err)
+        logger.error(`Error when calling getToken Controller`, err)
         response
             .status(CONST.HTTP_RESPONSE_CODE_INTERNAL_SERVER_ERROR)
             .send(`There is something wrong ${err}`)
@@ -48,14 +48,14 @@ module.exports.isAuth = (request, response) => {
                     }
                 })
                 .catch(err => {
-                    logger.logOnError('Error on retrieving active token', err)
+                    logger.error('Error on retrieving active token', err)
                     throw err
                 })
         }else{
             throw 'No bearer key found'
         }
     }catch(err){
-        logger.logOnError('Error when calling isAuth', err)
+        logger.error('Error when calling isAuth', err)
         response
             .status(CONST.HTTP_RESPONSE_CODE_INTERNAL_SERVER_ERROR)
             .send(`There is something wrong ${err}`)

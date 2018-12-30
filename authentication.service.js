@@ -9,13 +9,12 @@ const clientService = require('./client.service')
 const activeTokenService = require('./activetoken.service')
 const logger = require('./util.logger')
 
-
 const auth = {
 
     calculateExpiryTime(dateToAdd = new Date()){
         return date.addMinutes(dateToAdd, EXPIRY_DURATION_IN_MINUTES)
     },
-    createNewActiveToken(client){
+    createActiveToken(client){
         dateStartTime = new Date();
         return {'clientId': client.clientId, 'uuid': uuidv4(), 'startTime': dateStartTime, 'expiryTime': auth.calculateExpiryTime(dateStartTime), 'refreshToken': uuidv4()}
     },
@@ -27,24 +26,24 @@ const auth = {
         const bytes = utf8.encode(authorisationCredential)
         let params = base64.decode(bytes).split(":")
         
-        return new Promise((resolveThePromise, reject) => {
+        return new Promise((resolve, reject) => {
             clientService.findByClientIdAndCredential(params[0], params[1])
                 .then(findResult => {
                     if(findResult){
-                        const newActiveToken = auth.createNewActiveToken(findResult);
+                        const newActiveToken = auth.createActiveToken(findResult);
                         activeTokenService.insertActiveToken(newActiveToken)
-                            .then(resolveThePromise(auth.constructResponseFromToken(newActiveToken)))
+                            .then(resolve(auth.constructResponseFromToken(newActiveToken)))
                             .catch(err => {
-                                logger.logOnError(`Fail to insert active token`, err)
+                                logger.error(`Fail to insert active token`, err)
                                 reject(err)
                             })
                     }else{
-                        logger.logOnError(`Could not find token`, ['Find Result is', findResult])
+                        logger.error(`Could not find token`, ['Find Result is', findResult])
                         reject('Could not find client')
                     }
                 })
                 .catch(err => {
-                    logger.logOnError('Could not find client', ['err is', err])
+                    logger.error('Could not find client', ['err is', err])
                     reject('Could not find client')
                 })
         })
@@ -58,15 +57,15 @@ const auth = {
                         if(activeToken.expiryTime > new Date()){
                             resolve(auth.constructResponseFromToken(activeToken))
                         }else{
-                            logger.log('Token expiry', activeToken)
+                            logger.info('Token expiry', activeToken)
                             resolve(false)
                         }
                     }else{
-                        logger.log('No token found', bearer)
+                        logger.error('No token found', bearer)
                         resolve(false)
                     }
                 }).catch( err => {
-                    logger.logOnError('Something wrong when looking for activeToken', bearer)
+                    logger.error('Something wrong when looking for activeToken', bearer)
                     reject(false)
                 })
         })

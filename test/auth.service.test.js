@@ -29,10 +29,10 @@ describe('This is tests for authService', () => {
                     assert.notEqual(null, result.refreshToken)
                     done();
                 })
-                .catch(err => logger.logOnError('Error when calling is auth', err))
+                .catch(err => logger.error('Error when calling is auth', err))
             }
         ).catch((err) => {
-            logger.logOnError(`Error on get token`, err);
+            logger.error(`Error on get token`, err);
         });
         
     })
@@ -50,7 +50,7 @@ describe('This is tests for authService', () => {
     })
 
     it('should return token is expired', (done) => {
-        let activeToken = authService.createNewActiveToken({clientId: uuid()});
+        let activeToken = authService.createActiveToken({clientId: uuid()});
         //set token to expiry
         activeToken.startTime = dateAndTime.addMinutes(activeToken.startTime, -10)
         activeToken.expiryTime = dateAndTime.addMinutes(activeToken.expiryTime, -10)
@@ -59,12 +59,12 @@ describe('This is tests for authService', () => {
             .then(() => {
                 authService.isAuth(activeToken.uuid)
                     .then(result => {
-                        logger.log('activeToken should be expired', activeToken)
+                        logger.trace('activeToken should be expired', activeToken)
                         assert.equal(false, result, 'the token should be expiry');
                         done();
                     })
                     .catch(err => {
-                        logger.logOnError('Active token is error', err)
+                        logger.error('Active token is error', err)
                         assert.equal(1, 0, 'should not go here')
                         done();
                     })
