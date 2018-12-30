@@ -14,6 +14,20 @@ module.exports.createSuccessGetTokenRequest = () => {
     }
 }
 
+module.exports.createSuccessIsAuthTokenRequest = (bearerKey) => {
+    return {   
+        path: '/auth', 
+        method: 'GET',
+        get(param) { 
+            if(param === CONST.AUTHORIZATION){
+                return `Bearer ${bearerKey}`
+            }else{
+                return param
+            }
+        }
+    }
+}
+
 module.exports.createMockRequestNoRequestMethodFound = () => {
     return {   
         path: '/token', 

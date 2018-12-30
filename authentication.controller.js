@@ -32,7 +32,7 @@ module.exports.getToken = (request, response) => {
 
 module.exports.isAuth = (request, response) => {
     try{
-        const bearer = request.get(CONST.BEARER)
+        const bearer = request.get(CONST.AUTHORIZATION)
         const bearerKey = httpUtil.getBearerToken(bearer)
         if(bearerKey){
             authService.isAuth(bearerKey)
