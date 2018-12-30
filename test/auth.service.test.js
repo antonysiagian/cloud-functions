@@ -11,7 +11,6 @@ describe('This is tests for authService', () => {
 
         .then(result => {
 
-            logger.logOnError('Result of getToken', result)
             assert.notEqual(null, result.token)
             assert.notEqual(null, result.startTime)
             assert.notEqual(null, result.expiryTime)
