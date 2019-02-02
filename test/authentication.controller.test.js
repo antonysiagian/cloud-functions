@@ -12,14 +12,14 @@ describe('This is a test for authentication controller', () => {
         done()
     })
 
-    it('should return 405 status code, since no request method handler found',(done) => {
+    it('should return 405 status code, since no request method handler found', (done) => {
         let response = testUtil.createMockResponse();
         dispatcher.dispatch(testUtil.createMockRequestNoRequestMethodFound(), response);
         assert.strictEqual('405', response.statusCode)
         done()
     })
 
-    it('should return 415 status code, since no content type found',(done) => {
+    it('should return 415 status code, since no content type found', (done) => {
         let response = testUtil.createMockResponse();
         dispatcher.dispatch(testUtil.createRequestWithoutContentType(), response);
         assert.strictEqual('415', response.statusCode);
@@ -37,7 +37,7 @@ describe('This is a test for authentication controller', () => {
 
                 let isAuthRequest = testUtil.createSuccessIsAuthTokenRequest(backendResponse.jsonResponse.token)
                 let isAuthResponse = testUtil.createMockResponse()
-                
+
                 dispatcher.dispatch(isAuthRequest, isAuthResponse)
 
                 isAuthResponse.onComplete().then((isAuthResponse) => {

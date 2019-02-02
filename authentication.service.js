@@ -10,25 +10,36 @@ const logger = require('./util.logger')
 
 const auth = {
 
-    calculateExpiryTime(dateToAdd = new Date()){
+    calculateExpiryTime(dateToAdd = new Date()) {
         return date.addMinutes(dateToAdd, EXPIRY_DURATION_IN_MINUTES)
     },
-    createActiveToken(client){
+    createActiveToken(client) {
         dateStartTime = new Date();
-        return {'clientId': client.clientId, 'uuid': uuidv4(), 'startTime': dateStartTime, 'expiryTime': auth.calculateExpiryTime(dateStartTime), 'refreshToken': uuidv4()}
+        return {
+            'clientId': client.clientId,
+            'uuid': uuidv4(),
+            'startTime': dateStartTime,
+            'expiryTime': auth.calculateExpiryTime(dateStartTime),
+            'refreshToken': uuidv4()
+        }
     },
-    constructResponseFromToken(token){
-        return {token: token.uuid, refreshToken: token.refreshToken, startTime: token.startTime, expiryTime: token.expiryTime}
+    constructResponseFromToken(token) {
+        return {
+            token: token.uuid,
+            refreshToken: token.refreshToken,
+            startTime: token.startTime,
+            expiryTime: token.expiryTime
+        }
     },
     getToken: (authorisationCredential) => {
 
         const bytes = utf8.encode(authorisationCredential)
         let params = base64.decode(bytes).split(":")
-        
+
         return new Promise((resolve, reject) => {
             clientService.findByClientIdAndCredential(params[0], params[1])
                 .then(client => {
-                    if(client){
+                    if (client) {
                         const newActiveToken = auth.createActiveToken(client);
                         activeTokenService.insertActiveToken(newActiveToken)
                             .then(resolve(auth.constructResponseFromToken(newActiveToken)))
@@ -36,7 +47,7 @@ const auth = {
                                 logger.error(`Fail to insert active token`, err)
                                 reject(err)
                             })
-                    }else{
+                    } else {
                         logger.error(`Could not find token`, ['Client is', client])
                         reject('Could not find client')
                     }
@@ -46,30 +57,29 @@ const auth = {
                     reject('Could not find client')
                 })
         })
-    }, 
+    },
 
     isAuth: (bearer) => {
         return new Promise((resolve, reject) => {
             activeTokenService.findActiveToken(bearer)
                 .then((activeToken) => {
-                    if(activeToken){
-                        if(activeToken.expiryTime > new Date()){
+                    if (activeToken) {
+                        if (activeToken.expiryTime > new Date()) {
                             resolve(auth.constructResponseFromToken(activeToken))
-                        }else{
+                        } else {
                             logger.info('Token expiry', activeToken)
                             resolve(false)
                         }
-                    }else{
+                    } else {
                         logger.error('No token found', bearer)
                         resolve(false)
                     }
-                }).catch( err => {
-                    logger.error('Something wrong when looking for activeToken', bearer, err)
-                    reject(false)
-                })
+                }).catch(err => {
+                logger.error('Something wrong when looking for activeToken', bearer, err)
+                reject(false)
+            })
         })
     }
-
-} 
+}
 
 module.exports = auth;

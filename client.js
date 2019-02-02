@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const sequelize = require('./sequelize')
 
 const client = sequelize.define('clients', {
-    id:{
+    id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true

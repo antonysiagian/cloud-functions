@@ -16,7 +16,7 @@ describe("This is test for testing of httpUtil", () => {
         assert.strictEqual('d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=', httpUtil.getAuthToken('Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw='))
     })
 
-    it('Test when auth header is too long with space' , () => {
+    it('Test when auth header is too long with space', () => {
         assert.strictEqual(undefined, httpUtil.getAuthToken('Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw= d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw='))
     })
 

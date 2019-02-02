@@ -4,7 +4,7 @@ const sequelize = require('./sequelize')
 const activeToken = sequelize.define('active_tokens', {
     id: {
         type: Sequelize.INTEGER,
-        autoIncrement: true, 
+        autoIncrement: true,
         primaryKey: true
     },
     clientId: {
@@ -22,6 +22,6 @@ const activeToken = sequelize.define('active_tokens', {
     refreshToken: {
         type: Sequelize.STRING
     }
-  });
+});
 
-  module.exports = activeToken;
+module.exports = activeToken;

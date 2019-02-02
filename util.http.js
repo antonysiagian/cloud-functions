@@ -5,25 +5,25 @@ const MAX_LENGTH_AUTH = 100;
 const BASIC_AUTH_KEYWORD = "Basic"
 
 module.exports.getAuthToken = (fullAuthToken) => {
-    
-    if(fullAuthToken 
+
+    if (fullAuthToken
         && fullAuthToken.length < MAX_LENGTH_AUTH
-        && fullAuthToken.indexOf(BASIC_AUTH_KEYWORD) === 0 
-        && (split = fullAuthToken.split(constants.STRING_EMTPY)) 
-        && split.length === 2){
+        && fullAuthToken.indexOf(BASIC_AUTH_KEYWORD) === 0
+        && (split = fullAuthToken.split(constants.STRING_EMTPY))
+        && split.length === 2) {
         return split[1];
     }
-    
+
 }
 
 module.exports.getBearerToken = (bearerToken) => {
-    
-    if(bearerToken 
+
+    if (bearerToken
         && bearerToken.length < MAX_LENGTH_AUTH
-        && bearerToken.indexOf(constants.BEARER) === 0 
-        && (split = bearerToken.split(constants.STRING_EMTPY)) 
-        && split.length === 2){
+        && bearerToken.indexOf(constants.BEARER) === 0
+        && (split = bearerToken.split(constants.STRING_EMTPY))
+        && split.length === 2) {
         return split[1];
     }
-    
+
 }
