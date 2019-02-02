@@ -27,7 +27,6 @@ module.exports.getToken = (request, response) => {
             .status(CONST.HTTP_RESPONSE_CODE_INTERNAL_SERVER_ERROR)
             .send(`There is something wrong ${err}`)
     }
-    
 }
 
 module.exports.isAuth = (request, response) => {

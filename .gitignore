@@ -1,3 +1,4 @@
 staging.env.yaml
 node_modules
 .gcloudignore
+.idea/*

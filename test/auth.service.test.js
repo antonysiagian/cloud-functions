@@ -16,17 +16,17 @@ describe('This is tests for authService', () => {
 
         .then(result => {
 
-            assert.notEqual(null, result.token)
-            assert.notEqual(null, result.startTime)
-            assert.notEqual(null, result.expiryTime)
-            assert.notEqual(null, result.refreshToken)
+            assert.notStrictEqual(null, result.token)
+            assert.notStrictEqual(null, result.startTime)
+            assert.notStrictEqual(null, result.expiryTime)
+            assert.notStrictEqual(null, result.refreshToken)
 
             authService.isAuth(result.token)
                 .then((isAuthResult) => {
-                    assert.notEqual(null, isAuthResult.token)
-                    assert.notEqual(null, isAuthResult.startTime)
-                    assert.notEqual(null, isAuthResult.expiryTime)
-                    assert.notEqual(null, result.refreshToken)
+                    assert.notStrictEqual(null, isAuthResult.token)
+                    assert.notStrictEqual(null, isAuthResult.startTime)
+                    assert.notStrictEqual(null, isAuthResult.expiryTime)
+                    assert.notStrictEqual(null, result.refreshToken)
                     done();
                 })
                 .catch(err => logger.error('Error when calling is auth', err))

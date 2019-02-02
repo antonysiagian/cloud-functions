@@ -5,26 +5,26 @@ const assert = require('assert')
 describe("This is test for testing of httpUtil", () => {
 
     it('Test when request header is empty', () => {
-        assert.equal(null, httpUtil.getAuthToken(''))
+        assert.strictEqual(undefined, httpUtil.getAuthToken(''))
     });
 
     it('Test when auth header consist of basic is not empty', () => {
-        assert.equal('lkmasdlkamd', httpUtil.getAuthToken('Basic lkmasdlkamd'))
+        assert.strictEqual('lkmasdlkamd', httpUtil.getAuthToken('Basic lkmasdlkamd'))
     })
 
     it('Test when auth header is correct', () => {
-        assert.equal('d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=', httpUtil.getAuthToken('Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw='))
+        assert.strictEqual('d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=', httpUtil.getAuthToken('Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw='))
     })
 
     it('Test when auth header is too long with space' , () => {
-        assert.equal(null, httpUtil.getAuthToken('Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw= d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw='))
+        assert.strictEqual(undefined, httpUtil.getAuthToken('Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw= d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw='))
     })
 
     it('Test when auth header is too long without space', () => {
-        assert.equal(null, httpUtil.getAuthToken('Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw='))
+        assert.strictEqual(undefined, httpUtil.getAuthToken('Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw='))
     })
 
     it('Test get bearer token', () => {
-        assert.equal('SampleOFBearerToken', httpUtil.getBearerToken('Bearer SampleOFBearerToken'))
+        assert.strictEqual('SampleOFBearerToken', httpUtil.getBearerToken('Bearer SampleOFBearerToken'))
     })
 })
