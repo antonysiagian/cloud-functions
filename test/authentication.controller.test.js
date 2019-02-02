@@ -19,6 +19,13 @@ describe('This is a test for authentication controller', () => {
         done()
     })
 
+    it('should return 415 status code, since no content type found',(done) => {
+        let response = testUtil.createMockResponse();
+        dispatcher.dispatch(testUtil.createRequestWithoutContentType(), response);
+        assert.strictEqual('415', response.statusCode);
+        done()
+    })
+
     it('should return the controller response', (done) => {
         let response = testUtil.createMockResponse();
         dispatcher.dispatch(testUtil.createSuccessGetTokenRequest(), response);

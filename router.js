@@ -1,15 +1,18 @@
 const controller = require('./controller')
+const CONSTANT = require('./constant')
 
 const router = {
     paths: [
         {
             path: '/token',
-            method: 'GET', 
+            method: 'GET',
+            contentType: CONSTANT.CONTENT_TYPE_APPLICATION_JSON,
             handler: controller.getToken
         },
         {
             path: '/auth',
-            method: 'GET', 
+            method: 'GET',
+            contentType: CONSTANT.CONTENT_TYPE_APPLICATION_JSON,
             handler: controller.isAuth
         }
     ]
