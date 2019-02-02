@@ -1,14 +1,18 @@
 const uuid = require('uuid').v4;
-const dateAndTime = require('date-and-time')
+const dateAndTime = require('date-and-time');
 
-const assert = require('assert')
-const authService = require('../authentication.service')
-const logger = require('../util.logger')
-const activeTokenService = require('../activetoken.service')
+const assert = require('assert');
+const authService = require('../authentication.service');
+const logger = require('../util.logger');
+const activeTokenRepository = require('../activetoken.repository');
 
 describe('This is tests for authService', () => {
 
-    const webAppToken = `d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=` //web_app:web_app_credential
+    after(() => {
+        activeTokenRepository.removeAll();
+    });
+
+    const webAppToken = `d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw=`; //web_app:web_app_credential
     it('should return a new token and the token must be authenticated', (done) => {
 
         authService.getToken(webAppToken)
@@ -22,10 +26,10 @@ describe('This is tests for authService', () => {
 
                     authService.isAuth(result.token)
                         .then((isAuthResult) => {
-                            assert.notStrictEqual(null, isAuthResult.token)
-                            assert.notStrictEqual(null, isAuthResult.startTime)
-                            assert.notStrictEqual(null, isAuthResult.expiryTime)
-                            assert.notStrictEqual(null, result.refreshToken)
+                            assert.notStrictEqual(null, isAuthResult.token);
+                            assert.notStrictEqual(null, isAuthResult.startTime);
+                            assert.notStrictEqual(null, isAuthResult.expiryTime);
+                            assert.notStrictEqual(null, result.refreshToken);
                             done();
                         })
                         .catch(err => logger.error('Error when calling is auth', err))
@@ -33,8 +37,7 @@ describe('This is tests for authService', () => {
             ).catch((err) => {
             logger.error(`Error on get token`, err);
         });
-
-    })
+    });
 
     it('should not return any token because no app registered', (done) => {
         authService.getToken('TestNoToken').then(
@@ -46,7 +49,7 @@ describe('This is tests for authService', () => {
             assert.strictEqual('Could not find client', err)
             done()
         })
-    })
+    });
 
     it('should return token is expired', (done) => {
         let activeToken = authService.createActiveToken({clientId: uuid()});
@@ -54,7 +57,7 @@ describe('This is tests for authService', () => {
         activeToken.startTime = dateAndTime.addMinutes(activeToken.startTime, -10)
         activeToken.expiryTime = dateAndTime.addMinutes(activeToken.expiryTime, -10)
 
-        activeTokenService.insertActiveToken(activeToken)
+        activeTokenRepository.insertActiveToken(activeToken)
             .then(() => {
                 authService.isAuth(activeToken.uuid)
                     .then(result => {
@@ -64,7 +67,7 @@ describe('This is tests for authService', () => {
                     })
                     .catch(err => {
                         logger.error('Active token is error', err)
-                        assert.strictEqual(1, 0, 'should not go here')
+                        assert.strictEqual(1, 0, 'should not go here');
                         done();
                     })
             })

@@ -1,7 +1,7 @@
-const authService = require('./authentication.service')
-const CONST = require('./constant')
-const logger = require('./util.logger')
-const httpUtil = require('./util.http')
+const authService = require('./authentication.service');
+const CONST = require('./constant');
+const logger = require('./util.logger');
+const httpUtil = require('./util.http');
 
 module.exports.getToken = (request, response) => {
     try {
@@ -27,7 +27,7 @@ module.exports.getToken = (request, response) => {
             .status(CONST.HTTP_RESPONSE_CODE_INTERNAL_SERVER_ERROR)
             .send(`There is something wrong ${err}`)
     }
-}
+};
 
 module.exports.isAuth = (request, response) => {
     try {
@@ -59,4 +59,4 @@ module.exports.isAuth = (request, response) => {
             .status(CONST.HTTP_RESPONSE_CODE_INTERNAL_SERVER_ERROR)
             .send(`There is something wrong ${err}`)
     }
-}
+};

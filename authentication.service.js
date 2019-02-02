@@ -1,12 +1,12 @@
 const EXPIRY_DURATION_IN_MINUTES = process.env.EXPIRY_DURATION_IN_MINUTES || '10';
-const base64 = require('base-64')
-const utf8 = require('utf8')
-const uuidv4 = require('uuid/v4')
-const date = require('date-and-time')
+const base64 = require('base-64');
+const utf8 = require('utf8');
+const uuidv4 = require('uuid/v4');
+const date = require('date-and-time');
 
-const clientService = require('./client.service')
-const activeTokenService = require('./activetoken.service')
-const logger = require('./util.logger')
+const clientRepository = require('./client.repository');
+const activeTokenRepository = require('./activetoken.repository');
+const logger = require('./util.logger');
 
 const auth = {
 
@@ -33,15 +33,15 @@ const auth = {
     },
     getToken: (authorisationCredential) => {
 
-        const bytes = utf8.encode(authorisationCredential)
-        let params = base64.decode(bytes).split(":")
+        const bytes = utf8.encode(authorisationCredential);
+        let params = base64.decode(bytes).split(":");
 
         return new Promise((resolve, reject) => {
-            clientService.findByClientIdAndCredential(params[0], params[1])
+            clientRepository.findByClientIdAndCredential(params[0], params[1])
                 .then(client => {
                     if (client) {
                         const newActiveToken = auth.createActiveToken(client);
-                        activeTokenService.insertActiveToken(newActiveToken)
+                        activeTokenRepository.insertActiveToken(newActiveToken)
                             .then(resolve(auth.constructResponseFromToken(newActiveToken)))
                             .catch(err => {
                                 logger.error(`Fail to insert active token`, err)
@@ -61,7 +61,7 @@ const auth = {
 
     isAuth: (bearer) => {
         return new Promise((resolve, reject) => {
-            activeTokenService.findActiveToken(bearer)
+            activeTokenRepository.findActiveToken(bearer)
                 .then((activeToken) => {
                     if (activeToken) {
                         if (activeToken.expiryTime > new Date()) {
