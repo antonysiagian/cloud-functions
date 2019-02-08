@@ -16,13 +16,12 @@ describe('This is tests for authService', () => {
     it('should return a new token and the token must be authenticated', (done) => {
 
         authService.getToken(webAppToken)
-
             .then(result => {
 
-                    assert.notStrictEqual(null, result.token)
-                    assert.notStrictEqual(null, result.startTime)
-                    assert.notStrictEqual(null, result.expiryTime)
-                    assert.notStrictEqual(null, result.refreshToken)
+                    assert.notStrictEqual(null, result.token);
+                    assert.notStrictEqual(null, result.startTime);
+                    assert.notStrictEqual(null, result.expiryTime);
+                    assert.notStrictEqual(null, result.refreshToken);
 
                     authService.isAuth(result.token)
                         .then((isAuthResult) => {
@@ -46,7 +45,7 @@ describe('This is tests for authService', () => {
                 assert.strictEqual(1, 0)
             }
         ).catch(err => {
-            assert.strictEqual('Could not find client', err)
+            assert.strictEqual('Could not find client', err);
             done()
         })
     });
@@ -54,8 +53,8 @@ describe('This is tests for authService', () => {
     it('should return token is expired', (done) => {
         let activeToken = authService.createActiveToken({clientId: uuid()});
         //set token to expiry
-        activeToken.startTime = dateAndTime.addMinutes(activeToken.startTime, -10)
-        activeToken.expiryTime = dateAndTime.addMinutes(activeToken.expiryTime, -10)
+        activeToken.startTime = dateAndTime.addMinutes(activeToken.startTime, -10);
+        activeToken.expiryTime = dateAndTime.addMinutes(activeToken.expiryTime, -10);
 
         activeTokenRepository.insertActiveToken(activeToken)
             .then(() => {

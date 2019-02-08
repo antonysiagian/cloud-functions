@@ -1,7 +1,7 @@
-const assert = require('assert')
-const dispatcher = require('../dispatcher')
-const testUtil = require('./util.test')
-const logger = require('../util.logger')
+const assert = require('assert');
+const dispatcher = require('../dispatcher');
+const testUtil = require('./util.test');
+const logger = require('../util.logger');
 const activeTokenRepository = require ('../activetoken.repository');
 
 describe('This is a test for authentication controller', () => {
