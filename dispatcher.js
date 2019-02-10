@@ -34,4 +34,4 @@ module.exports.dispatch = (httpRequest, httpResponse) => {
         logger.info('New request arrive and does not have any endpoint handler', httpRequest);
         httpResponse.status('404').end()
     }
-}
+};

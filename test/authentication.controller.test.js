@@ -10,34 +10,13 @@ describe('This is a test for authentication controller', () => {
         activeTokenRepository.removeAll();
     });
 
-    it('should return 404 status code, since no handler found', (done) => {
-        let response = testUtil.createMockResponse();
-        dispatcher.dispatch(testUtil.createMockRequestFor404Response(), response);
-        assert.strictEqual('404', response.statusCode);
-        done()
-    });
-
-    it('should return 405 status code, since no request method handler found', (done) => {
-        let response = testUtil.createMockResponse();
-        dispatcher.dispatch(testUtil.createMockRequestNoRequestMethodFound(), response);
-        assert.strictEqual('405', response.statusCode);
-        done()
-    });
-
-    it('should return 415 status code, since no content type found', (done) => {
-        let response = testUtil.createMockResponse();
-        dispatcher.dispatch(testUtil.createRequestWithoutContentType(), response);
-        assert.strictEqual('415', response.statusCode);
-        done()
-    });
-
     it('should return the controller response', (done) => {
         let response = testUtil.createMockResponse();
         dispatcher.dispatch(testUtil.createSuccessGetTokenRequest(), response);
-
         response.onComplete()
             .then((backendResponse) => {
-                logger.trace('Success getting backend response', backendResponse)
+
+                logger.trace('Success getting backend response', backendResponse);
                 assert.strictEqual('200', backendResponse.statusCode);
 
                 let isAuthRequest = testUtil.createSuccessIsAuthTokenRequest(backendResponse.jsonResponse.token);
@@ -47,7 +26,7 @@ describe('This is a test for authentication controller', () => {
 
                 isAuthResponse.onComplete().then((isAuthResponse) => {
                     logger.trace('isAuthResponse', isAuthResponse);
-                    assert.strictEqual(isAuthResponse.jsonResponse.token, backendResponse.jsonResponse.token);
+                    assert.strictEqual(isAuthResponse.jsonResponse.body.token, backendResponse.jsonResponse.token);
                     done()
                 })
             })

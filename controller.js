@@ -1,3 +1,3 @@
-const authenticationController = require('./authentication.controller')
+const authenticationController = require('./authentication.controller');
 
 module.exports = authenticationController;

@@ -5,6 +5,7 @@ const assert = require('assert');
 const authService = require('../authentication.service');
 const logger = require('../util.logger');
 const activeTokenRepository = require('../activetoken.repository');
+const token = require('../token');
 
 describe('This is tests for authService', () => {
 
@@ -45,23 +46,24 @@ describe('This is tests for authService', () => {
                 assert.strictEqual(1, 0)
             }
         ).catch(err => {
-            assert.strictEqual('Could not find client', err);
+            assert.strictEqual('Client not found', err);
             done()
         })
     });
 
     it('should return token is expired', (done) => {
-        let activeToken = authService.createActiveToken({clientId: uuid()});
+        let activeToken = token.createActiveToken({clientId: uuid()});
         //set token to expiry
         activeToken.startTime = dateAndTime.addMinutes(activeToken.startTime, -10);
         activeToken.expiryTime = dateAndTime.addMinutes(activeToken.expiryTime, -10);
 
-        activeTokenRepository.insertActiveToken(activeToken)
+        activeTokenRepository.createActiveToken(activeToken)
             .then(() => {
                 authService.isAuth(activeToken.uuid)
                     .then(result => {
-                        logger.trace('activeToken should be expired', activeToken)
-                        assert.strictEqual(false, result, 'the token should be expiry');
+                        logger.trace('activeToken should be expired', activeToken);
+                        assert.strictEqual(false, result.auth, 'the token should be expiry');
+                        assert.strictEqual(result.message, 'Token expiry');
                         done();
                     })
                     .catch(err => {

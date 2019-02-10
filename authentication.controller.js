@@ -1,12 +1,12 @@
 const authService = require('./authentication.service');
 const CONST = require('./constant');
 const logger = require('./util.logger');
-const httpUtil = require('./util.http');
+const token = require('./token');
 
 module.exports.getToken = (request, response) => {
     try {
-        const authorization = request.get(CONST.AUTHORIZATION)
-        const basicToken = httpUtil.getAuthToken(authorization)
+        const authorization = request.get(CONST.AUTHORIZATION);
+        const basicToken = token.getAuthToken(authorization);
         if (basicToken) {
             authService
                 .getToken(basicToken)
@@ -15,14 +15,14 @@ module.exports.getToken = (request, response) => {
                         .status(CONST.HTTP_RESPONSE_CODE_SUCCESS)
                         .json(token)
                 }).catch(err => {
-                logger.error('Error on getToken', err)
-                throw err;
-            })
+                    logger.error('Error on getToken', err);
+                    throw err;
+                })
         } else {
             throw "No authkey found";
         }
     } catch (err) {
-        logger.error(`Error when calling getToken Controller`, err)
+        logger.error(`Error when calling getToken Controller`, err);
         response
             .status(CONST.HTTP_RESPONSE_CODE_INTERNAL_SERVER_ERROR)
             .send(`There is something wrong ${err}`)
@@ -31,8 +31,8 @@ module.exports.getToken = (request, response) => {
 
 module.exports.isAuth = (request, response) => {
     try {
-        const bearer = request.get(CONST.AUTHORIZATION)
-        const bearerKey = httpUtil.getBearerToken(bearer)
+        const bearer = request.get(CONST.AUTHORIZATION);
+        const bearerKey = token.getBearerToken(bearer);
         if (bearerKey) {
             authService.isAuth(bearerKey)
                 .then((token) => {
@@ -51,10 +51,10 @@ module.exports.isAuth = (request, response) => {
                     throw err
                 })
         } else {
-            throw 'No bearer key found'
+            throw 'No bearer key found';
         }
     } catch (err) {
-        logger.error('Error when calling isAuth', err)
+        logger.error('Error when calling isAuth', err);
         response
             .status(CONST.HTTP_RESPONSE_CODE_INTERNAL_SERVER_ERROR)
             .send(`There is something wrong ${err}`)

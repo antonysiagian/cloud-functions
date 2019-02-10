@@ -1,36 +1,13 @@
-const EXPIRY_DURATION_IN_MINUTES = process.env.EXPIRY_DURATION_IN_MINUTES || '10';
 const base64 = require('base-64');
 const utf8 = require('utf8');
-const uuidv4 = require('uuid/v4');
-const date = require('date-and-time');
 
 const clientRepository = require('./client.repository');
 const activeTokenRepository = require('./activetoken.repository');
 const logger = require('./util.logger');
+const CONSTANT = require('./constant');
+const token = require('./token')
 
 const auth = {
-
-    calculateExpiryTime(dateToAdd = new Date()) {
-        return date.addMinutes(dateToAdd, EXPIRY_DURATION_IN_MINUTES)
-    },
-    createActiveToken(client) {
-        dateStartTime = new Date();
-        return {
-            'clientId': client.clientId,
-            'uuid': uuidv4(),
-            'startTime': dateStartTime,
-            'expiryTime': auth.calculateExpiryTime(dateStartTime),
-            'refreshToken': uuidv4()
-        }
-    },
-    constructResponseFromToken(token) {
-        return {
-            token: token.uuid,
-            refreshToken: token.refreshToken,
-            startTime: token.startTime,
-            expiryTime: token.expiryTime
-        }
-    },
     getToken: (authorisationCredential) => {
 
         const bytes = utf8.encode(authorisationCredential);
@@ -40,46 +17,54 @@ const auth = {
             clientRepository.findByClientIdAndCredential(params[0], params[1])
                 .then(client => {
                     if (client) {
-                        const newActiveToken = auth.createActiveToken(client);
-                        activeTokenRepository.insertActiveToken(newActiveToken)
-                            .then(resolve(auth.constructResponseFromToken(newActiveToken)))
+                        const newActiveToken = token.createActiveToken(client);
+                        const response = token.constructResponseFromToken(newActiveToken);
+                        activeTokenRepository.createActiveToken(newActiveToken)
+                            .then(resolve(response))
                             .catch(err => {
-                                logger.error(`Fail to insert active token`, err)
-                                reject(err)
+                                logger.error(`Fail to insert active token`, err);
+                                reject(err);
                             })
                     } else {
-                        logger.error(`Could not find token`, ['Client is', client])
-                        reject('Could not find client')
+                        logger.error(`Client not found`, ['Client is', client]);
+                        reject('Client not found')
                     }
                 })
                 .catch(err => {
-                    logger.error('Could not find client', ['err is', err])
-                    reject('Could not find client')
+                    logger.error(CONSTANT.TECHNICAL_ERROR_PREFIX, ['err is', err]);
+                    reject(CONSTANT.TECHNICAL_ERROR_PREFIX + err);
                 })
         })
     },
 
     isAuth: (bearer) => {
+        let result = {auth: false};
         return new Promise((resolve, reject) => {
             activeTokenRepository.findActiveToken(bearer)
                 .then((activeToken) => {
                     if (activeToken) {
                         if (activeToken.expiryTime > new Date()) {
-                            resolve(auth.constructResponseFromToken(activeToken))
+                            result.auth = true;
+                            result.message = 'Token is active';
+                            result.body = token.constructResponseFromToken(activeToken);
+                            resolve(result);
                         } else {
-                            logger.info('Token expiry', activeToken)
-                            resolve(false)
+                            logger.info('Token expiry', activeToken);
+                            result.message = 'Token expiry';
+                            resolve(result);
                         }
                     } else {
-                        logger.error('No token found', bearer)
-                        resolve(false)
+                        logger.info('No token found', bearer);
+                        result.message = 'Token not found';
+                        resolve(result);
                     }
                 }).catch(err => {
-                logger.error('Something wrong when looking for activeToken', bearer, err)
-                reject(false)
-            })
+                    logger.error(CONSTANT.TECHNICAL_ERROR_PREFIX, bearer, err);
+                    result.message = CONSTANT.TECHNICAL_ERROR_PREFIX + err;
+                    reject(result);
+                })
         })
     }
-}
+};
 
 module.exports = auth;

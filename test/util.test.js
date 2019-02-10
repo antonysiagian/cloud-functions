@@ -1,9 +1,9 @@
-const CONSTANT = require('../constant')
+const CONSTANT = require('../constant');
 
 module.exports.createSuccessGetTokenRequest = () => {
     return {
         path: '/token',
-        method: 'GET',
+        method: 'POST',
         get(param) {
             if (param === CONSTANT.AUTHORIZATION) {
                 return "Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw="
@@ -19,7 +19,7 @@ module.exports.createSuccessGetTokenRequest = () => {
 module.exports.createRequestWithoutContentType = () => {
     return {
         path: '/token',
-        method: 'GET',
+        method: 'POST',
         get(param) {
             if (param === CONSTANT.AUTHORIZATION) {
                 return "Basic d2ViX2FwcDp3ZWJfYXBwX2NyZWRlbnRpYWw="
@@ -46,19 +46,19 @@ module.exports.createSuccessIsAuthTokenRequest = (bearerKey) => {
             }
         }
     }
-}
+};
 
 module.exports.createMockRequestNoRequestMethodFound = () => {
     return {
         path: '/token',
-        method: 'POST',
+        method: 'GET',
         get(param) {
             if (param === CONSTANT.CONTENT_TYPE) {
                 return CONSTANT.CONTENT_TYPE_APPLICATION_JSON;
             }
         }
     }
-}
+};
 
 module.exports.createMockRequestFor404Response = () => {
     return {
@@ -70,7 +70,7 @@ module.exports.createMockRequestFor404Response = () => {
             }
         }
     }
-}
+};
 
 module.exports.createMockResponse = () => {
     return {
@@ -84,35 +84,35 @@ module.exports.createMockResponse = () => {
             return param
         },
         send(responseToSend) {
-            this.sendValue = responseToSend
-            this.resolveResponse(this)
+            this.sendValue = responseToSend;
+            this.resolveResponse(this);
             return this
         },
         status(newStatusCode) {
-            this.statusCode = newStatusCode
+            this.statusCode = newStatusCode;
             return this
         },
         end() {
             //nothing todo here
-            this.resolveResponse(this)
+            this.resolveResponse(this);
             return this
         },
         reset() {
-            this.sendValue = ""
-            this.statusCode = ""
-            this.jsonResponse = ""
+            this.sendValue = "";
+            this.statusCode = "";
+            this.jsonResponse = "";
             return this
         },
         json(jsonResponse) {
-            this.jsonResponse = jsonResponse
-            this.resolveResponse(this)
+            this.jsonResponse = jsonResponse;
+            this.resolveResponse(this);
             return this
         },
         onComplete() {
             return new Promise((resolve, reject) => {
-                this.resolveResponse = resolve
-                this.rejectResponse = reject
+                this.resolveResponse = resolve;
+                this.rejectResponse = reject;
             })
         }
     }
-}
+};

@@ -16,7 +16,7 @@ describe('This test is used to identify behavior of repository', () => {
     let insertPromise = null;
 
     before(() => {
-        insertPromise = activeTokenRepository.insertActiveToken(activeToken);
+        insertPromise = activeTokenRepository.createActiveToken(activeToken);
     });
 
     after(() => {

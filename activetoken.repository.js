@@ -1,8 +1,8 @@
 const Op = require('sequelize').Op;
 const activeToken = require('./activetoken');
 
-module.exports.insertActiveToken = (newActiveToken) => {
-    return activeToken.upsert(newActiveToken);
+module.exports.createActiveToken = (token) => {
+    return activeToken.upsert(token);
 };
 
 module.exports.removeActiveToken = (bearer) => {
