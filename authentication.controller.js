@@ -12,16 +12,16 @@ module.exports.getToken = (request, response) => {
         if (basicToken) {
             authService
                 .getToken(basicToken)
-                .then((token) => {
-                    response
-                        .status(CONST.HTTP_RESPONSE_CODE_SUCCESS)
-                        .json(token)
-                }).catch(err => {
-                    logger.error('Error on getToken', err);
-                    throw err;
-                })
+                    .then((token) => {
+                        response
+                            .status(CONST.HTTP_RESPONSE_CODE_SUCCESS)
+                            .json(token)
+                    }).catch(err => {
+                        throw err;
+                    });
         } else {
-            response.status(CONST.HTTP_RESPONSE_CODE_UNAUTHORISED)
+            response
+                .status(CONST.HTTP_RESPONSE_CODE_UNAUTHORISED)
                 .send("No auth key found");
         }
     } catch (err) {
@@ -51,10 +51,10 @@ module.exports.isAuth = (request, response) => {
                 })
                 .catch(err => {
                     logger.error('Error on retrieving active token', err);
-                    throw err
+                    throw err;
                 })
         } else {
-            logger.error('Bearer not found honey', bearer)
+            logger.error('Bearer not found honey', bearer);
             response
                 .status(CONST.HTTP_RESPONSE_CODE_UNAUTHORISED)
                 .send('Bearer not found honey!');
