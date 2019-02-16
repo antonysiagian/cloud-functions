@@ -5,7 +5,7 @@ const clientRepository = require('./client.repository');
 const activeTokenRepository = require('./activetoken.repository');
 const logger = require('./util.logger');
 const CONSTANT = require('./constant');
-const token = require('./token')
+const token = require('./token');
 
 const auth = {
     getToken: (authorisationCredential) => {

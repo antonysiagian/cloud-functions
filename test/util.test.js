@@ -32,6 +32,23 @@ module.exports.createRequestWithoutContentType = () => {
     }
 }
 
+
+module.exports.createRequestWithAuthToken = (authToken) => {
+    return {
+        path: '/token',
+        method: 'POST',
+        get(param) {
+            if (param === CONSTANT.AUTHORIZATION) {
+                return authToken;
+            } else if (param === CONSTANT.CONTENT_TYPE) {
+                return CONSTANT.CONTENT_TYPE_APPLICATION_JSON;
+            } else {
+                return param
+            }
+        }
+    }
+}
+
 module.exports.createSuccessIsAuthTokenRequest = (bearerKey) => {
     return {
         path: '/auth',

@@ -5,8 +5,10 @@ const token = require('./token');
 
 module.exports.getToken = (request, response) => {
     try {
+
         const authorization = request.get(CONST.AUTHORIZATION);
         const basicToken = token.getAuthToken(authorization);
+
         if (basicToken) {
             authService
                 .getToken(basicToken)
@@ -19,7 +21,8 @@ module.exports.getToken = (request, response) => {
                     throw err;
                 })
         } else {
-            throw "No authkey found";
+            response.status(CONST.HTTP_RESPONSE_CODE_UNAUTHORISED)
+                .send("No auth key found");
         }
     } catch (err) {
         logger.error(`Error when calling getToken Controller`, err);
@@ -42,16 +45,19 @@ module.exports.isAuth = (request, response) => {
                             .json(token)
                     } else {
                         response
-                            .status(CONST.HTTP_RESPONSE_CODE_NO_RESPONSE)
+                            .status(CONST.HTTP_RESPONSE_CODE_UNAUTHORISED)
                             .send('Token is not found')
                     }
                 })
                 .catch(err => {
-                    logger.error('Error on retrieving active token', err)
+                    logger.error('Error on retrieving active token', err);
                     throw err
                 })
         } else {
-            throw 'No bearer key found';
+            logger.error('Bearer not found honey', bearer)
+            response
+                .status(CONST.HTTP_RESPONSE_CODE_UNAUTHORISED)
+                .send('Bearer not found honey!');
         }
     } catch (err) {
         logger.error('Error when calling isAuth', err);
